@@ -62,6 +62,27 @@ public class UserTests {
 
     }
 
+
+    @Test(priority = 5)
+    public  void UpdateUserByNameDup(){
+
+        //Update data using Payload
+        userPayload.setFirstName(faker.name().firstName());
+        userPayload.setLastName(faker.name().lastName());
+        userPayload.setEmail(faker.internet().safeEmailAddress());
+
+
+        Response res=UserEndpoints.updateUser(this.userPayload.getUsername(),userPayload);
+        res.then().log().all();
+        Assert.assertEquals(res.getStatusCode(),200);
+
+        //Checking Data after update
+
+        Response responseAfterUpdate= UserEndpoints.getUser(this.userPayload.getUsername());
+        Assert.assertEquals(responseAfterUpdate.getStatusCode(),200);
+
+    }
+
     @Test(priority = 4)
     public  void testDeleteUserByName(){
         Response res= UserEndpoints.deleteUser(this.userPayload.getUsername());
