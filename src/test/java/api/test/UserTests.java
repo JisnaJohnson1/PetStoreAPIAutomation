@@ -63,8 +63,16 @@ public class UserTests {
     }
 
 
+
+
+    @Test(priority = 4)
+    public  void testDeleteUserByName(){
+        Response res= UserEndpoints.deleteUser(this.userPayload.getUsername());
+        Assert.assertEquals(res.getStatusCode(),200);
+    }
+
     @Test(priority = 5)
-    public  void UpdateUserByNameDup(){
+    public  void UpdateUserByNameDup1(){
 
         //Update data using Payload
         userPayload.setFirstName(faker.name().firstName());
@@ -83,9 +91,23 @@ public class UserTests {
 
     }
 
-    @Test(priority = 4)
-    public  void testDeleteUserByName(){
-        Response res= UserEndpoints.deleteUser(this.userPayload.getUsername());
+    @Test(priority = 6)
+    public  void UpdateUserByNameDup2(){
+
+        //Update data using Payload
+        userPayload.setFirstName(faker.name().firstName());
+        userPayload.setLastName(faker.name().lastName());
+        userPayload.setEmail(faker.internet().safeEmailAddress());
+
+
+        Response res=UserEndpoints.updateUser(this.userPayload.getUsername(),userPayload);
+        res.then().log().all();
         Assert.assertEquals(res.getStatusCode(),200);
+
+        //Checking Data after update
+
+        Response responseAfterUpdate= UserEndpoints.getUser(this.userPayload.getUsername());
+        Assert.assertEquals(responseAfterUpdate.getStatusCode(),200);
+
     }
 }
